@@ -1,6 +1,6 @@
 name: app_review_promoter
 description: A Flutter package for intelligently promoting app reviews with customizable timing and multi-step user engagement flow.
-version: 1.0.1
+version: 1.0.2
 homepage: https://github.com/changyy/app_review_promoter_dart
 repository: https://github.com/changyy/app_review_promoter_dart
 issue_tracker: https://github.com/changyy/app_review_promoter_dart/issues

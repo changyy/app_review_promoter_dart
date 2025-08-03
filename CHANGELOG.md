@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2] - 2025-08-03
+
+### Changed
+- Simplified README.md documentation for better readability
+- Removed redundant sections and overly detailed platform-specific examples
+- Condensed documentation from 426 lines to 154 lines while maintaining essential information
+
 ## [1.0.1] - 2025-08-03
 
 ### Added
