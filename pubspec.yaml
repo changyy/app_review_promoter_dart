@@ -1,0 +1,51 @@
+name: app_review_promoter
+description: A Flutter package for intelligently promoting app reviews with customizable timing and multi-step user engagement flow.
+version: 1.0.0
+homepage: https://github.com/changyy/app_review_promoter_dart
+repository: https://github.com/changyy/app_review_promoter_dart
+issue_tracker: https://github.com/changyy/app_review_promoter_dart/issues
+documentation: https://github.com/changyy/app_review_promoter_dart/blob/main/README.md
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Only minimal dependencies for core functionality
+  shared_preferences: ^2.2.2  # For persistent state storage
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  
+  # Linting and analysis
+  flutter_lints: ^5.0.0
+  
+  # Testing utilities
+  mockito: ^5.4.2
+  build_runner: ^2.4.7
+
+flutter:
+  # This package is a Dart package, it doesn't contain any native code or assets
+  # so we don't need to specify any flutter configuration here
+
+topics:
+  - app-review
+  - user-engagement
+  - user-experience
+  - app-promotion
+  - cross-platform
+
+funding:
+  - https://github.com/sponsors/changyy
+
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  web:
+  windows:
