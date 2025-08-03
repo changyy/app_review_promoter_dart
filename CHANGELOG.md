@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.1] - 2025-08-03
+
+### Added
+- Complete example application demonstrating all package features
+- Example includes debug tools for testing review flows
+- Example shows custom configuration and styling options
+- Added comprehensive example documentation
+
+### Fixed
+- Updated pubspec.yaml with correct repository URLs
+- Fixed dart analyze issues in example code
+
 ## [1.0.0] - 2025-08-03
 
 ### Added
