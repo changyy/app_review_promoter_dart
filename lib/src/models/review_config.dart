@@ -19,14 +19,14 @@ class ReviewConfig {
   final Function(String event, Map<String, dynamic> parameters)?
       onAnalyticsEvent;
 
-  /// Custom callback when user agrees to review (用戶點擊第二段的 YES 時)
+  /// Custom callback when user agrees to review (when user clicks YES in the second step)
   /// This allows complete customization of the review action
   final Future<void> Function()? onReviewRequested;
 
-  /// Callback when user responds to satisfaction question (第一段 YES/No)
+  /// Callback when user responds to satisfaction question (first step YES/No)
   final void Function(bool isSatisfied)? onSatisfactionResponse;
 
-  /// Callback when user responds to review request (第二段 YES/No)
+  /// Callback when user responds to review request (second step YES/No)
   final void Function(bool agreedToReview)? onReviewResponse;
 
   /// Callback when the review flow completes
@@ -80,27 +80,27 @@ class ReviewConfig {
 /// Customizable messages for the review promotion flow
 /// All messages must be provided by the user for complete customization
 class ReviewMessages {
-  /// 第一段顯示訊息 - 初始滿意度問題
+  /// First step display message - initial satisfaction question
   final String initialQuestion;
 
-  /// 第一段按鈕文字
+  /// First step button text
   final String initialYesButton;
   final String initialNoButton;
 
-  /// 第一段選 YES 後的顯示訊息
+  /// Display message after selecting YES in first step
   final String satisfiedMessage;
 
-  /// 第一段選 No 後的顯示訊息
+  /// Display message after selecting No in first step
   final String unsatisfiedMessage;
 
-  /// 第二段按鈕文字
+  /// Second step button text
   final String secondYesButton;
   final String secondNoButton;
 
-  /// 第二段選 YES 後的顯示訊息
+  /// Display message after selecting YES in second step
   final String agreeToReviewMessage;
 
-  /// 第二段選 No 後的顯示訊息
+  /// Display message after selecting No in second step
   final String declineToReviewMessage;
 
   const ReviewMessages({
@@ -184,7 +184,7 @@ class ReviewStyle {
   /// Button styling
   final dynamic primaryButtonBackgroundColor;
   final dynamic secondaryButtonBackgroundColor;
-  final dynamic secondaryButtonTextColor; // 新增：負向按鈕文字顏色
+  final dynamic secondaryButtonTextColor; // New: negative button text color
   final dynamic buttonBorderColor;
   final double? buttonBorderRadius;
   final dynamic buttonTextStyle;
@@ -201,6 +201,13 @@ class ReviewStyle {
   final dynamic leadingIcon;
   final dynamic trailingIcon;
 
+  /// Button flex ratio - button width ratio
+  /// Flex value for positive button, default is 1
+  final int? positiveButtonFlex;
+
+  /// Flex value for negative button, default is 1
+  final int? negativeButtonFlex;
+
   const ReviewStyle({
     this.backgroundColor,
     this.borderColor,
@@ -210,7 +217,7 @@ class ReviewStyle {
     this.buttonTextColor,
     this.primaryButtonBackgroundColor,
     this.secondaryButtonBackgroundColor,
-    this.secondaryButtonTextColor, // 新增參數
+    this.secondaryButtonTextColor, // New parameter
     this.buttonBorderColor,
     this.buttonBorderRadius,
     this.buttonTextStyle,
@@ -220,6 +227,8 @@ class ReviewStyle {
     this.spacing,
     this.leadingIcon,
     this.trailingIcon,
+    this.positiveButtonFlex, // New: positive button ratio
+    this.negativeButtonFlex, // New: negative button ratio
   });
 
   /// Creates a copy of this style with the given fields replaced
@@ -232,7 +241,7 @@ class ReviewStyle {
     dynamic buttonTextColor,
     dynamic primaryButtonBackgroundColor,
     dynamic secondaryButtonBackgroundColor,
-    dynamic secondaryButtonTextColor, // 新增參數
+    dynamic secondaryButtonTextColor, // New parameter
     dynamic buttonBorderColor,
     double? buttonBorderRadius,
     dynamic buttonTextStyle,
@@ -242,6 +251,8 @@ class ReviewStyle {
     double? spacing,
     dynamic leadingIcon,
     dynamic trailingIcon,
+    int? positiveButtonFlex, // New: positive button ratio
+    int? negativeButtonFlex, // New: negative button ratio
   }) {
     return ReviewStyle(
       backgroundColor: backgroundColor ?? this.backgroundColor,
@@ -254,8 +265,8 @@ class ReviewStyle {
           primaryButtonBackgroundColor ?? this.primaryButtonBackgroundColor,
       secondaryButtonBackgroundColor:
           secondaryButtonBackgroundColor ?? this.secondaryButtonBackgroundColor,
-      secondaryButtonTextColor:
-          secondaryButtonTextColor ?? this.secondaryButtonTextColor, // 新增實作
+      secondaryButtonTextColor: secondaryButtonTextColor ??
+          this.secondaryButtonTextColor, // New implementation
       buttonBorderColor: buttonBorderColor ?? this.buttonBorderColor,
       buttonBorderRadius: buttonBorderRadius ?? this.buttonBorderRadius,
       buttonTextStyle: buttonTextStyle ?? this.buttonTextStyle,
@@ -265,6 +276,10 @@ class ReviewStyle {
       spacing: spacing ?? this.spacing,
       leadingIcon: leadingIcon ?? this.leadingIcon,
       trailingIcon: trailingIcon ?? this.trailingIcon,
+      positiveButtonFlex:
+          positiveButtonFlex ?? this.positiveButtonFlex, // New implementation
+      negativeButtonFlex:
+          negativeButtonFlex ?? this.negativeButtonFlex, // New implementation
     );
   }
 }

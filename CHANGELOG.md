@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.0.3] - 2025-08-10
+
+### Added
+- Button ratio configuration feature - customize width ratio between positive and negative buttons
+- New `positiveButtonFlex` and `negativeButtonFlex` parameters in `ReviewStyle`
+- Comprehensive button ratio example demonstrating various ratio configurations
+- Documentation for button ratio feature usage and best practices
+
+### Changed
+- Improved button layout implementation with flexible width ratios
+- Enhanced button text rendering with auto-scaling for better responsiveness
+- Converted all Chinese comments to English for better international collaboration
+
+### Example
+```dart
+ReviewStyle(
+  positiveButtonFlex: 3,  // Positive button takes 3 parts width
+  negativeButtonFlex: 2,  // Negative button takes 2 parts width
+)
+```
+
 ## [1.0.2] - 2025-08-03
 
 ### Changed

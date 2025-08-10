@@ -146,11 +146,14 @@ class _ReviewBannerState extends State<ReviewBanner> {
 
     final config = _manager.config;
 
+    final style = config.style;
+
     return Row(
       children: [
-        // 負向按鈕 (左側)
+        // Negative button (left side)
         Expanded(
-          flex: 2, // 較小比例
+          flex: style?.negativeButtonFlex ??
+              1, // Use configured ratio, default is 1
           child: _buildButton(
             text: state.step == ReviewStep.satisfaction
                 ? config.messages.initialNoButton
@@ -159,10 +162,11 @@ class _ReviewBannerState extends State<ReviewBanner> {
             onPressed: () => _handleButtonPress(false),
           ),
         ),
-        const SizedBox(width: 12.0), // 增加間距
-        // 正向按鈕 (右側，更大更顯眼)
+        const SizedBox(width: 10.0), // Moderate spacing
+        // Positive button (right side)
         Expanded(
-          flex: 3, // 較大比例，更突出
+          flex: style?.positiveButtonFlex ??
+              1, // Use configured ratio, default is 1
           child: _buildButton(
             text: state.step == ReviewStep.satisfaction
                 ? config.messages.initialYesButton
@@ -183,39 +187,56 @@ class _ReviewBannerState extends State<ReviewBanner> {
     final style = _manager.config.style;
 
     return SizedBox(
-      height: 44.0, // 統一按鈕高度，符合觸控標準
+      height: 44.0, // Unified button height, meets touch standards
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: isPrimary
               ? (style?.primaryButtonBackgroundColor ??
-                  Color(0xFF34C759)) // iOS 綠色
+                  Color(0xFF34C759)) // iOS green
               : (style?.secondaryButtonBackgroundColor ?? Colors.grey[100]),
           foregroundColor: isPrimary
-              ? (style?.buttonTextColor ?? Colors.white) // 正向按鈕文字顏色
+              ? (style?.buttonTextColor ??
+                  Colors.white) // Positive button text color
               : (style?.secondaryButtonTextColor ??
-                  Colors.grey[700]), // 負向按鈕文字顏色
-          elevation: isPrimary ? 2.0 : 0.0, // 正向按鈕有陰影，負向按鈕扁平
+                  Colors.grey[700]), // Negative button text color
+          elevation: isPrimary
+              ? 2.0
+              : 0.0, // Positive button has shadow, negative button is flat
           shadowColor: isPrimary ? Colors.black26 : Colors.transparent,
+          padding: EdgeInsets.symmetric(
+              horizontal: 8.0, vertical: 8.0), // Reduce internal padding
           shape: RoundedRectangleBorder(
             borderRadius:
                 BorderRadius.circular(style?.buttonBorderRadius ?? 10.0),
             side: isPrimary
-                ? BorderSide.none // 正向按鈕無邊框
+                ? BorderSide.none // Positive button has no border
                 : BorderSide(
-                    // 負向按鈕有淺色邊框
+                    // Negative button has light border
                     color: style?.buttonBorderColor ?? Colors.grey[300]!,
                     width: 1.0,
                   ),
           ),
           textStyle: TextStyle(
-            fontSize: 16.0, // 較大字體
-            fontWeight: isPrimary ? FontWeight.w600 : FontWeight.w400, // 正向按鈕較粗
+            fontSize: 15.0, // Slightly reduced font size, from 16 to 15
+            fontWeight: isPrimary
+                ? FontWeight.w600
+                : FontWeight.w400, // Positive button is bolder
           ),
         ),
-        child: Text(
-          text,
-          style: style?.buttonTextStyle,
+        child: FittedBox(
+          fit: BoxFit.scaleDown, // Text auto-scales to fit button width
+          child: Text(
+            text,
+            maxLines: 1, // Force single line
+            overflow: TextOverflow.visible, // Avoid text truncation
+            style: style?.buttonTextStyle?.copyWith(
+                  fontSize: 15.0, // Ensure consistent font size
+                ) ??
+                TextStyle(
+                  fontSize: 15.0,
+                ),
+          ),
         ),
       ),
     );

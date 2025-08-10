@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:app_review_promoter/app_review_promoter.dart';
+import 'button_ratio_example.dart';
 
 void main() {
   runApp(MyApp());
@@ -51,8 +52,33 @@ class _MyHomePageState extends State<MyHomePage> {
       onFlowCompleted: (analytics) {
         print('Review flow completed: ${analytics.toString()}');
       },
-      messages: ReviewMessages.defaultMessages(),
-      style: ReviewStyle(),
+      messages: ReviewMessages(
+        initialQuestion: 'Do you like our APP?',
+        initialYesButton: 'Pretty good',
+        initialNoButton: 'Not comfortable',
+        satisfiedMessage: 'Great! Could you please rate us in the store?',
+        unsatisfiedMessage:
+            'We want to hear your feedback, please consider leaving a review',
+        secondYesButton: 'OK',
+        secondNoButton: 'Not now',
+        agreeToReviewMessage: 'Thank you for your support!',
+        declineToReviewMessage: 'Thank you for your feedback!',
+      ),
+      style: ReviewStyle(
+        backgroundColor: Colors.white,
+        borderColor: Colors.grey[300],
+        borderRadius: 12.0,
+        messageTextColor: Colors.grey[800],
+        primaryButtonBackgroundColor: Color(0xFF34C759),
+        secondaryButtonBackgroundColor: Colors.grey[100],
+        buttonTextColor: Colors.white,
+        secondaryButtonTextColor: Colors.grey[700],
+        padding: EdgeInsets.all(16.0),
+        margin: EdgeInsets.all(16.0),
+        // 🆕 Demo button ratio feature: positive button wider than negative button (3:2)
+        positiveButtonFlex: 3,
+        negativeButtonFlex: 2,
+      ),
     );
 
     await _reviewManager.initialize(config);
@@ -121,17 +147,65 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(height: 40),
               ElevatedButton(
                 onPressed: _forceShowReview,
-                child: Text('Force Show Review Dialog'),
+                child: Text('Force Show Review Prompt'),
               ),
               SizedBox(height: 10),
               ElevatedButton(
                 onPressed: _simulateUsage,
-                child: Text('Simulate 5 Min Usage'),
+                child: Text('Simulate 5 Minutes Usage'),
               ),
               SizedBox(height: 10),
               ElevatedButton(
                 onPressed: _resetReviewData,
                 child: Text('Reset Review Data'),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const ButtonRatioExample(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green[600],
+                  foregroundColor: Colors.white,
+                ),
+                child: Text('🎨 Button Ratio Examples'),
+              ),
+              SizedBox(height: 20),
+              Container(
+                padding: EdgeInsets.all(16.0),
+                margin: EdgeInsets.symmetric(horizontal: 20.0),
+                decoration: BoxDecoration(
+                  color: Colors.blue[50],
+                  borderRadius: BorderRadius.circular(8.0),
+                  border: Border.all(color: Colors.blue[200]!),
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      '🎨 New Feature: Button Ratio Configuration',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'You can now set the width ratio of positive and negative buttons through ReviewStyle:',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'positiveButtonFlex: 3\nnegativeButtonFlex: 2',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'monospace',
+                        color: Colors.blue[700],
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: 20),
               FutureBuilder<String>(
