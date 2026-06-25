@@ -44,15 +44,21 @@ void main() {
       expect(messages.initialQuestion, equals('Are you enjoying our app?'));
       expect(messages.initialYesButton, equals('Yes'));
       expect(messages.initialNoButton, equals('No'));
-      expect(messages.satisfiedMessage,
-          equals('Great! Would you mind leaving us a review?'));
+      expect(
+        messages.satisfiedMessage,
+        equals('Great! Would you mind leaving us a review?'),
+      );
       expect(messages.unsatisfiedMessage, contains('feedback'));
       expect(messages.secondYesButton, equals('Sure'));
       expect(messages.secondNoButton, equals('Maybe Later'));
       expect(
-          messages.agreeToReviewMessage, equals('Thank you for your support!'));
-      expect(messages.declineToReviewMessage,
-          equals('Thank you for your feedback!'));
+        messages.agreeToReviewMessage,
+        equals('Thank you for your support!'),
+      );
+      expect(
+        messages.declineToReviewMessage,
+        equals('Thank you for your feedback!'),
+      );
     });
 
     test('ReviewMessages helper methods work correctly', () {
@@ -127,8 +133,10 @@ void main() {
       expect(map['flow_was_completed'], isTrue);
       expect(map['usage_time_when_shown_ms'], equals(180000));
       expect(map['first_shown_at'], equals(testDate.toIso8601String()));
-      expect(map['completed_at'],
-          equals(testDate.add(Duration(minutes: 5)).toIso8601String()));
+      expect(
+        map['completed_at'],
+        equals(testDate.add(Duration(minutes: 5)).toIso8601String()),
+      );
 
       // Test fromMap
       final restored = ReviewAnalytics.fromMap(map);
@@ -151,10 +159,14 @@ void main() {
       expect(ReviewStep.values, contains(ReviewStep.completed));
 
       expect(SatisfactionResponse.values.length, equals(3));
-      expect(SatisfactionResponse.values,
-          contains(SatisfactionResponse.satisfied));
-      expect(SatisfactionResponse.values,
-          contains(SatisfactionResponse.unsatisfied));
+      expect(
+        SatisfactionResponse.values,
+        contains(SatisfactionResponse.satisfied),
+      );
+      expect(
+        SatisfactionResponse.values,
+        contains(SatisfactionResponse.unsatisfied),
+      );
       expect(SatisfactionResponse.values, contains(SatisfactionResponse.none));
 
       expect(ReviewResponse.values.length, equals(3));
@@ -172,15 +184,12 @@ void main() {
       expect(manager1.state.step, equals(ReviewStep.hidden));
     });
 
-    testWidgets('ReviewBanner can be created without error',
-        (WidgetTester tester) async {
+    testWidgets('ReviewBanner can be created without error', (
+      WidgetTester tester,
+    ) async {
       // Test that ReviewBanner can be created without throwing
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: ReviewBanner(),
-          ),
-        ),
+        const MaterialApp(home: Scaffold(body: ReviewBanner())),
       );
 
       // Should not throw any errors during creation
@@ -190,13 +199,12 @@ void main() {
       expect(find.byType(Container), findsNothing);
     });
 
-    testWidgets('ReviewBanner can be forced to show',
-        (WidgetTester tester) async {
+    testWidgets('ReviewBanner can be forced to show', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: ReviewBanner(debugForceShow: true),
-          ),
+          home: Scaffold(body: ReviewBanner(debugForceShow: true)),
         ),
       );
 
@@ -206,14 +214,11 @@ void main() {
       expect(find.byType(Container), findsOneWidget);
     });
 
-    testWidgets('ReviewBanner respects forceHide parameter',
-        (WidgetTester tester) async {
+    testWidgets('ReviewBanner respects forceHide parameter', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: ReviewBanner(forceHide: true),
-          ),
-        ),
+        const MaterialApp(home: Scaffold(body: ReviewBanner(forceHide: true))),
       );
 
       expect(find.byType(ReviewBanner), findsOneWidget);

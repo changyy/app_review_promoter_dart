@@ -176,10 +176,7 @@ class AppReviewManager extends ChangeNotifier {
 
   /// Show the review prompt
   Future<void> _showReviewPrompt() async {
-    _state = _state.copyWith(
-      step: ReviewStep.satisfaction,
-      isVisible: true,
-    );
+    _state = _state.copyWith(step: ReviewStep.satisfaction, isVisible: true);
 
     _analytics = _analytics.copyWith(
       firstShownAt: DateTime.now(),
@@ -233,8 +230,9 @@ class AppReviewManager extends ChangeNotifier {
   /// Handle review response
   Future<void> handleReviewResponse(bool agreedToReview) async {
     _state = _state.copyWith(
-      reviewResponse:
-          agreedToReview ? ReviewResponse.agreed : ReviewResponse.declined,
+      reviewResponse: agreedToReview
+          ? ReviewResponse.agreed
+          : ReviewResponse.declined,
       step: ReviewStep.thankYou,
     );
 
@@ -394,10 +392,7 @@ class AppReviewManager extends ChangeNotifier {
 
   /// Complete the review flow
   Future<void> _completeFlow() async {
-    _state = _state.copyWith(
-      step: ReviewStep.completed,
-      isVisible: false,
-    );
+    _state = _state.copyWith(step: ReviewStep.completed, isVisible: false);
 
     // Update final analytics
     _analytics = _analytics.copyWith(
@@ -444,31 +439,26 @@ class AppReviewManager extends ChangeNotifier {
 
   /// Debug: Force show review prompt (ignores all conditions)
   void debugForceShow() {
-    _state = _state.copyWith(
-      step: ReviewStep.satisfaction,
-      isVisible: true,
-    );
+    _state = _state.copyWith(step: ReviewStep.satisfaction, isVisible: true);
     notifyListeners();
   }
 
   /// Debug: Simulate usage time to trigger normal flow
   void debugSimulateUsage(Duration duration) {
-    _state = _state.copyWith(
-      totalUsageTime: duration.inMilliseconds,
-    );
+    _state = _state.copyWith(totalUsageTime: duration.inMilliseconds);
     _checkShouldShow();
     notifyListeners();
   }
 
   /// Debug: Get current state information
   Map<String, dynamic> get debugInfo => {
-        'appVersion': _config.appVersion,
-        'totalUsageTime': _state.totalUsageTime,
-        'minUsageTime': _config.minUsageTime.inMilliseconds,
-        'step': _state.step.toString(),
-        'isVisible': _state.isVisible,
-        'hasUserAlreadyResponded': hasUserAlreadyResponded,
-      };
+    'appVersion': _config.appVersion,
+    'totalUsageTime': _state.totalUsageTime,
+    'minUsageTime': _config.minUsageTime.inMilliseconds,
+    'step': _state.step.toString(),
+    'isVisible': _state.isVisible,
+    'hasUserAlreadyResponded': hasUserAlreadyResponded,
+  };
 
   /// Check if user has already provided feedback for current version
   bool get hasUserAlreadyResponded => _state.step == ReviewStep.completed;

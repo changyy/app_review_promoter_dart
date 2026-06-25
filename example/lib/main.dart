@@ -11,9 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'App Review Promoter Example',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: MyHomePage(title: 'App Review Promoter Demo'),
     );
   }
@@ -108,16 +106,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _simulateUsage() {
     _reviewManager.debugSimulateUsage(Duration(minutes: 5));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Simulated 5 minutes of usage')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Simulated 5 minutes of usage')));
   }
 
   void _resetReviewData() {
     _reviewManager.resetAll();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Review data reset')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Review data reset')));
   }
 
   @override
@@ -129,17 +127,13 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(title: Text(widget.title)),
       body: ReviewBanner(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                'You have pushed the button this many times:',
-              ),
+              Text('You have pushed the button this many times:'),
               Text(
                 '$_counter',
                 style: Theme.of(context).textTheme.headlineMedium,

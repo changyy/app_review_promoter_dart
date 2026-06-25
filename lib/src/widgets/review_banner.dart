@@ -128,7 +128,8 @@ class _ReviewBannerState extends State<ReviewBanner> {
 
     return Text(
       message,
-      style: style?.messageTextStyle ??
+      style:
+          style?.messageTextStyle ??
           TextStyle(
             color: style?.messageTextColor ?? Colors.black87,
             fontSize: 14.0,
@@ -152,7 +153,8 @@ class _ReviewBannerState extends State<ReviewBanner> {
       children: [
         // Negative button (left side)
         Expanded(
-          flex: style?.negativeButtonFlex ??
+          flex:
+              style?.negativeButtonFlex ??
               1, // Use configured ratio, default is 1
           child: _buildButton(
             text: state.step == ReviewStep.satisfaction
@@ -165,7 +167,8 @@ class _ReviewBannerState extends State<ReviewBanner> {
         const SizedBox(width: 10.0), // Moderate spacing
         // Positive button (right side)
         Expanded(
-          flex: style?.positiveButtonFlex ??
+          flex:
+              style?.positiveButtonFlex ??
               1, // Use configured ratio, default is 1
           child: _buildButton(
             text: state.step == ReviewStep.satisfaction
@@ -193,24 +196,28 @@ class _ReviewBannerState extends State<ReviewBanner> {
         style: ElevatedButton.styleFrom(
           backgroundColor: isPrimary
               ? (style?.primaryButtonBackgroundColor ??
-                  Color(0xFF34C759)) // iOS green
+                    Color(0xFF34C759)) // iOS green
               : (style?.secondaryButtonBackgroundColor ?? Colors.grey[100]),
           foregroundColor: isPrimary
               ? (style?.buttonTextColor ??
-                  Colors.white) // Positive button text color
+                    Colors.white) // Positive button text color
               : (style?.secondaryButtonTextColor ??
-                  Colors.grey[700]), // Negative button text color
+                    Colors.grey[700]), // Negative button text color
           elevation: isPrimary
               ? 2.0
               : 0.0, // Positive button has shadow, negative button is flat
           shadowColor: isPrimary ? Colors.black26 : Colors.transparent,
           padding: EdgeInsets.symmetric(
-              horizontal: 8.0, vertical: 8.0), // Reduce internal padding
+            horizontal: 8.0,
+            vertical: 8.0,
+          ), // Reduce internal padding
           shape: RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(style?.buttonBorderRadius ?? 10.0),
+            borderRadius: BorderRadius.circular(
+              style?.buttonBorderRadius ?? 10.0,
+            ),
             side: isPrimary
-                ? BorderSide.none // Positive button has no border
+                ? BorderSide
+                      .none // Positive button has no border
                 : BorderSide(
                     // Negative button has light border
                     color: style?.buttonBorderColor ?? Colors.grey[300]!,
@@ -230,12 +237,11 @@ class _ReviewBannerState extends State<ReviewBanner> {
             text,
             maxLines: 1, // Force single line
             overflow: TextOverflow.visible, // Avoid text truncation
-            style: style?.buttonTextStyle?.copyWith(
+            style:
+                style?.buttonTextStyle?.copyWith(
                   fontSize: 15.0, // Ensure consistent font size
                 ) ??
-                TextStyle(
-                  fontSize: 15.0,
-                ),
+                TextStyle(fontSize: 15.0),
           ),
         ),
       ),

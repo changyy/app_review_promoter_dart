@@ -22,9 +22,7 @@ class ReviewDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       child: const Padding(
         padding: EdgeInsets.all(16.0),
         child: ReviewBanner(),

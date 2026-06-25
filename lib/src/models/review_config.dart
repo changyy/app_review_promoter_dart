@@ -18,7 +18,7 @@ class ReviewConfig {
 
   /// Custom analytics callback function
   final Function(String event, Map<String, dynamic> parameters)?
-      onAnalyticsEvent;
+  onAnalyticsEvent;
 
   /// Custom callback when user agrees to review (when user clicks YES in the second step)
   /// This allows complete customization of the review action.
@@ -298,7 +298,8 @@ class ReviewStyle {
           primaryButtonBackgroundColor ?? this.primaryButtonBackgroundColor,
       secondaryButtonBackgroundColor:
           secondaryButtonBackgroundColor ?? this.secondaryButtonBackgroundColor,
-      secondaryButtonTextColor: secondaryButtonTextColor ??
+      secondaryButtonTextColor:
+          secondaryButtonTextColor ??
           this.secondaryButtonTextColor, // New implementation
       buttonBorderColor: buttonBorderColor ?? this.buttonBorderColor,
       buttonBorderRadius: buttonBorderRadius ?? this.buttonBorderRadius,

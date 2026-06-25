@@ -32,9 +32,8 @@ class InAppReviewLauncher extends StoreReviewLauncher {
   Future<void> openStoreListing({
     String? appStoreId,
     String? microsoftStoreId,
-  }) =>
-      _review.openStoreListing(
-        appStoreId: appStoreId,
-        microsoftStoreId: microsoftStoreId,
-      );
+  }) => _review.openStoreListing(
+    appStoreId: appStoreId,
+    microsoftStoreId: microsoftStoreId,
+  );
 }

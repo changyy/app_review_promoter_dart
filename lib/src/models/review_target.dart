@@ -25,12 +25,12 @@ class PlatformReviewConfig {
 
   /// Use the native in-app review prompt on this platform.
   const PlatformReviewConfig.system()
-      : mode = ReviewMode.system,
-        storeId = null;
+    : mode = ReviewMode.system,
+      storeId = null;
 
   /// Open the store listing on this platform.
   const PlatformReviewConfig.storeListing({this.storeId})
-      : mode = ReviewMode.storeListing;
+    : mode = ReviewMode.storeListing;
 }
 
 /// Context passed to a user-provided [ReviewRequestHandler].

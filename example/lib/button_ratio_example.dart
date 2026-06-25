@@ -24,8 +24,10 @@ class ButtonRatioExample extends StatelessWidget {
             const SizedBox(height: 20),
 
             // 1. Default ratio 1:1
-            const Text('1. Default Ratio (1:1)',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+            const Text(
+              '1. Default Ratio (1:1)',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
             const SizedBox(height: 8),
             _buildExampleBanner(
               title: 'Default ratio: Both buttons have equal width',
@@ -35,8 +37,10 @@ class ButtonRatioExample extends StatelessWidget {
             const SizedBox(height: 20),
 
             // 2. Positive button wider 3:2
-            const Text('2. Positive Button Wider (3:2)',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+            const Text(
+              '2. Positive Button Wider (3:2)',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
             const SizedBox(height: 8),
             _buildExampleBanner(
               title: 'Positive button wider: Encourages user clicks',
@@ -46,8 +50,10 @@ class ButtonRatioExample extends StatelessWidget {
             const SizedBox(height: 20),
 
             // 3. Positive button much wider 2:1
-            const Text('3. Positive Button Much Wider (2:1)',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+            const Text(
+              '3. Positive Button Much Wider (2:1)',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
             const SizedBox(height: 8),
             _buildExampleBanner(
               title: 'Positive button much wider: Emphasizes positive response',
@@ -57,8 +63,10 @@ class ButtonRatioExample extends StatelessWidget {
             const SizedBox(height: 20),
 
             // 4. Negative button wider 1:2 (Not recommended)
-            const Text('4. Negative Button Wider (1:2) - Not Recommended',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+            const Text(
+              '4. Negative Button Wider (1:2) - Not Recommended',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
             const SizedBox(height: 8),
             _buildExampleBanner(
               title: 'Negative button wider: Not recommended design',
@@ -68,8 +76,10 @@ class ButtonRatioExample extends StatelessWidget {
             const SizedBox(height: 20),
 
             // 5. Extreme ratio 4:1
-            const Text('5. Extreme Ratio (4:1)',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+            const Text(
+              '5. Extreme Ratio (4:1)',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
             const SizedBox(height: 8),
             _buildExampleBanner(
               title: 'Extreme ratio: Heavily emphasizes positive button',
@@ -84,25 +94,38 @@ class ButtonRatioExample extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('📖 Usage Guide',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w600)),
+                    Text(
+                      '📖 Usage Guide',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     SizedBox(height: 8),
                     Text(
-                        '• positiveButtonFlex: Flex value for positive button'),
+                      '• positiveButtonFlex: Flex value for positive button',
+                    ),
                     Text(
-                        '• negativeButtonFlex: Flex value for negative button'),
+                      '• negativeButtonFlex: Flex value for negative button',
+                    ),
                     Text(
-                        '• Ratio 3:2 means positive button takes 3 parts width, negative button takes 2 parts'),
+                      '• Ratio 3:2 means positive button takes 3 parts width, negative button takes 2 parts',
+                    ),
                     Text('• If not set, defaults to 1:1 equal ratio'),
                     SizedBox(height: 8),
-                    Text('💡 Recommendations:',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, color: Colors.orange)),
                     Text(
-                        '• Recommend using 3:2 or 2:1 to highlight positive button'),
+                      '💡 Recommendations:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.orange,
+                      ),
+                    ),
                     Text(
-                        '• Avoid making negative button wider than positive button'),
+                      '• Recommend using 3:2 or 2:1 to highlight positive button',
+                    ),
+                    Text(
+                      '• Avoid making negative button wider than positive button',
+                    ),
                     Text('• Extreme ratios may affect user experience'),
                   ],
                 ),
@@ -166,8 +189,10 @@ class ButtonRatioExample extends StatelessWidget {
                               side: BorderSide(color: Colors.grey[300]!),
                             ),
                           ),
-                          child: const Text('Not comfortable',
-                              style: TextStyle(fontSize: 15.0)),
+                          child: const Text(
+                            'Not comfortable',
+                            style: TextStyle(fontSize: 15.0),
+                          ),
                         ),
                       ),
                     ),
@@ -187,9 +212,13 @@ class ButtonRatioExample extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
-                          child: const Text('Good',
-                              style: TextStyle(
-                                  fontSize: 15.0, fontWeight: FontWeight.w600)),
+                          child: const Text(
+                            'Good',
+                            style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
                       ),
                     ),

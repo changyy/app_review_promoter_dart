@@ -48,7 +48,8 @@ void main() {
     test('iOS storeListing with id → openStoreListing(appStoreId)', () async {
       final fake = await _run(
         const ReviewConfig(
-            ios: PlatformReviewConfig.storeListing(storeId: '123456789')),
+          ios: PlatformReviewConfig.storeListing(storeId: '123456789'),
+        ),
         TargetPlatform.iOS,
       );
       expect(fake.openStore, hasLength(1));
@@ -89,16 +90,19 @@ void main() {
       expect(fake.requestReviewCount, 1);
     });
 
-    test('storeListing but openStoreListing throws → fallback requestReview',
-        () async {
-      final fake = await _run(
-        const ReviewConfig(
-            ios: PlatformReviewConfig.storeListing(storeId: '123456789')),
-        TargetPlatform.iOS,
-        throwOnOpen: true,
-      );
-      expect(fake.requestReviewCount, 1);
-    });
+    test(
+      'storeListing but openStoreListing throws → fallback requestReview',
+      () async {
+        final fake = await _run(
+          const ReviewConfig(
+            ios: PlatformReviewConfig.storeListing(storeId: '123456789'),
+          ),
+          TargetPlatform.iOS,
+          throwOnOpen: true,
+        );
+        expect(fake.requestReviewCount, 1);
+      },
+    );
 
     test('iOS and Android can differ', () async {
       const config = ReviewConfig(
