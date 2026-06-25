@@ -101,21 +101,55 @@ final info = AppReviewManager.instance.debugInfo;
 await AppReviewManager.instance.resetAll();
 ```
 
-## Platform Integration Example
+## Store navigation (built-in, v1.1.0+)
+
+Since 1.1.0 the package can take the user to the store itself — you no longer
+need to wire `in_app_review` by hand. Configure it **per platform**:
 
 ```dart
-import 'package:in_app_review/in_app_review.dart';
-
 ReviewConfig(
-  onReviewRequested: () async {
-    final InAppReview inAppReview = InAppReview.instance;
-    if (await inAppReview.isAvailable()) {
-      await inAppReview.requestReview();
-    } else {
-      await inAppReview.openStoreListing();
-    }
-  },
+  // iOS opens the App Store review page (needs the App Store numeric id);
+  // Android opens the Play listing automatically (uses the package name).
+  ios: const PlatformReviewConfig.storeListing(storeId: '123456789'),
+  android: const PlatformReviewConfig.storeListing(),
+  // A platform left null defaults to the native in-app prompt (requestReview()).
 )
+```
+
+- `ReviewMode.system` → native `requestReview()` (may be throttled by the OS).
+- `ReviewMode.storeListing` → opens the store page (reliable for explicit "rate"
+  intent). iOS/macOS need a store id; if missing, it falls back to `requestReview()`.
+- iOS and Android can use different modes.
+
+### Custom handler (takes priority)
+
+Provide `onReviewRequest` to handle it yourself. Return `true` to stop, or `false`
+to hand back to the package default:
+
+```dart
+ReviewConfig(
+  onReviewRequest: (ctx) async {
+    if (ctx.platform == TargetPlatform.iOS) {
+      await myOwnFlow();
+      return true;            // handled, stop
+    }
+    return false;             // fall through to the package default
+  },
+  android: const PlatformReviewConfig.storeListing(),
+)
+```
+
+> Backward compatible: the legacy `onReviewRequested` callback still works and is
+> treated as "handled" (the package will not run its default). With no handler and
+> no per-platform config, behavior is unchanged (native prompt).
+
+### Engagement trigger
+
+Call `markEngagement()` when the user does something meaningful (e.g. opens a key
+screen) to bump usage time to the threshold and let the prompt appear sooner:
+
+```dart
+AppReviewManager.instance.markEngagement();
 ```
 
 ## Example
@@ -133,21 +167,16 @@ See the [example](example/) directory for a complete sample app demonstrating al
 | `messages` | `ReviewMessages` | Required | Customizable text |
 | `style` | `ReviewStyle` | Default | UI styling |
 | `enableAnalytics` | `bool` | true | Enable analytics |
-| `onReviewRequested` | `Function()` | null | Review action callback |
+| `onReviewRequest` | `ReviewRequestHandler` | null | Custom handler; return `true` to stop, `false` to fall through (priority) |
+| `ios` / `android` / `macos` / `windows` | `PlatformReviewConfig` | null (→ system) | Per-platform default (system / storeListing) |
+| `onReviewRequested` | `Function()` | null | Legacy review action callback (treated as handled) |
 | `onFlowCompleted` | `Function(ReviewAnalytics)` | null | Completion callback |
 
 ### Additional Dependencies
 
-This package handles the review flow UI and timing. For actual review functionality:
-
-```yaml
-dependencies:
-  # For in-app reviews
-  in_app_review: ^2.0.0
-  
-  # For custom URL handling
-  url_launcher: ^6.0.0
-```
+Store/system review actions are built in via `in_app_review` (bundled since 1.1.0) —
+you do not need to add it yourself for the default behavior. A custom `onReviewRequest`
+handler may use any approach you like (e.g. `url_launcher`).
 
 ## License
 

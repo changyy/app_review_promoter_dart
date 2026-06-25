@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:app_review_promoter/app_review_promoter.dart';
 
 /// Button Ratio Example - Demonstrates how to customize the width ratio between positive and negative buttons
 class ButtonRatioExample extends StatelessWidget {

@@ -12,10 +12,12 @@ library app_review_promoter;
 export 'src/models/review_config.dart';
 export 'src/models/review_state.dart';
 export 'src/models/review_analytics.dart';
+export 'src/models/review_target.dart';
 
 // Services
 export 'src/services/review_manager.dart';
 export 'src/services/storage_service.dart';
+export 'src/services/store_review_launcher.dart';
 
 // UI Components
 export 'src/widgets/review_banner.dart';

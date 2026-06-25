@@ -1,5 +1,6 @@
 import '../utils/constants.dart';
 import 'review_analytics.dart';
+import 'review_target.dart';
 
 /// Configuration class for customizing the app review promotion behavior.
 class ReviewConfig {
@@ -20,8 +21,25 @@ class ReviewConfig {
       onAnalyticsEvent;
 
   /// Custom callback when user agrees to review (when user clicks YES in the second step)
-  /// This allows complete customization of the review action
+  /// This allows complete customization of the review action.
+  ///
+  /// Legacy: treated as "handled" (the package will not run its default).
+  /// Prefer [onReviewRequest] (returns whether to stop or fall through), or the
+  /// per-platform [ios]/[android] config for the package to handle it for you.
   final Future<void> Function()? onReviewRequested;
+
+  /// User handler invoked when the user explicitly agrees to review.
+  /// Return `true` to stop (handled), `false` to fall through to the package
+  /// default. Takes priority over [onReviewRequested] and the per-platform config.
+  final ReviewRequestHandler? onReviewRequest;
+
+  /// Per-platform default behavior, used when neither [onReviewRequest] (returning
+  /// true) nor legacy [onReviewRequested] handled it. When a platform is left null,
+  /// it defaults to [ReviewMode.system] (native `requestReview()`).
+  final PlatformReviewConfig? ios;
+  final PlatformReviewConfig? android;
+  final PlatformReviewConfig? macos;
+  final PlatformReviewConfig? windows;
 
   /// Callback when user responds to satisfaction question (first step YES/No)
   final void Function(bool isSatisfied)? onSatisfactionResponse;
@@ -42,6 +60,11 @@ class ReviewConfig {
     this.enableAnalytics = true,
     this.onAnalyticsEvent,
     this.onReviewRequested,
+    this.onReviewRequest,
+    this.ios,
+    this.android,
+    this.macos,
+    this.windows,
     this.onSatisfactionResponse,
     this.onReviewResponse,
     this.onFlowCompleted,
@@ -56,6 +79,11 @@ class ReviewConfig {
     bool? enableAnalytics,
     Function(String event, Map<String, dynamic> parameters)? onAnalyticsEvent,
     Future<void> Function()? onReviewRequested,
+    ReviewRequestHandler? onReviewRequest,
+    PlatformReviewConfig? ios,
+    PlatformReviewConfig? android,
+    PlatformReviewConfig? macos,
+    PlatformReviewConfig? windows,
     void Function(bool isSatisfied)? onSatisfactionResponse,
     void Function(bool agreedToReview)? onReviewResponse,
     void Function(ReviewAnalytics analytics)? onFlowCompleted,
@@ -68,6 +96,11 @@ class ReviewConfig {
       enableAnalytics: enableAnalytics ?? this.enableAnalytics,
       onAnalyticsEvent: onAnalyticsEvent ?? this.onAnalyticsEvent,
       onReviewRequested: onReviewRequested ?? this.onReviewRequested,
+      onReviewRequest: onReviewRequest ?? this.onReviewRequest,
+      ios: ios ?? this.ios,
+      android: android ?? this.android,
+      macos: macos ?? this.macos,
+      windows: windows ?? this.windows,
       onSatisfactionResponse:
           onSatisfactionResponse ?? this.onSatisfactionResponse,
       onReviewResponse: onReviewResponse ?? this.onReviewResponse,

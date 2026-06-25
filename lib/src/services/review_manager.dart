@@ -3,8 +3,10 @@ import 'package:flutter/foundation.dart';
 import '../models/review_config.dart';
 import '../models/review_state.dart';
 import '../models/review_analytics.dart';
+import '../models/review_target.dart';
 import '../utils/constants.dart';
 import 'storage_service.dart';
+import 'store_review_launcher.dart';
 
 /// Main manager class for handling app review promotion logic
 class AppReviewManager extends ChangeNotifier {
@@ -25,6 +27,12 @@ class AppReviewManager extends ChangeNotifier {
   /// Timer for tracking usage time
   Timer? _usageTimer;
 
+  /// Launcher for store/system review (defaults to in_app_review; injectable for tests).
+  StoreReviewLauncher _launcher = const InAppReviewLauncher();
+
+  /// Resolves the current platform (defaults to defaultTargetPlatform; injectable for tests).
+  TargetPlatform Function() _platformResolver = () => defaultTargetPlatform;
+
   AppReviewManager._();
 
   /// Singleton instance
@@ -42,9 +50,18 @@ class AppReviewManager extends ChangeNotifier {
   /// Current analytics
   ReviewAnalytics get analytics => _analytics;
 
-  /// Initialize the review manager with configuration
-  Future<void> initialize(ReviewConfig config) async {
+  /// Initialize the review manager with configuration.
+  ///
+  /// [launcher] and [platformResolver] are injection seams for testing; in
+  /// production the defaults (in_app_review + defaultTargetPlatform) are used.
+  Future<void> initialize(
+    ReviewConfig config, {
+    StoreReviewLauncher? launcher,
+    TargetPlatform Function()? platformResolver,
+  }) async {
     _config = config;
+    if (launcher != null) _launcher = launcher;
+    if (platformResolver != null) _platformResolver = platformResolver;
 
     // Initialize storage
     await _storage.initialize();
@@ -255,10 +272,8 @@ class AppReviewManager extends ChangeNotifier {
   /// Open store review
   Future<void> _openStoreReview() async {
     try {
-      // Use custom callback if provided
-      if (_config.onReviewRequested != null) {
-        await _config.onReviewRequested!();
-      }
+      // Resolve the action: user handler → legacy callback → package default.
+      await _resolveReviewAction();
 
       _analytics = _analytics.copyWith(
         storeOpenedAt: DateTime.now(),
@@ -280,6 +295,102 @@ class AppReviewManager extends ChangeNotifier {
       }
     }
   }
+
+  /// Resolve what happens when the user agrees to review.
+  /// Priority: user handler ([ReviewConfig.onReviewRequest]) → legacy
+  /// [ReviewConfig.onReviewRequested] → package per-platform default.
+  Future<void> _resolveReviewAction() async {
+    final handler = _config.onReviewRequest;
+    if (handler != null) {
+      final ctx = ReviewContext(
+        platform: _platformResolver(),
+        appVersion: _config.appVersion,
+        runPackageDefault: _runPackageDefault,
+      );
+      final handled = await handler(ctx);
+      if (handled) return; // user handled it → stop
+      // false → fall through to package default
+    } else if (_config.onReviewRequested != null) {
+      await _config.onReviewRequested!(); // legacy: treat as handled
+      return;
+    }
+    await _runPackageDefault();
+  }
+
+  /// Package default: per-platform system / storeListing, with fallback to the
+  /// native prompt when the required store id is missing or the store fails to open.
+  Future<void> _runPackageDefault() async {
+    final platform = _platformResolver();
+    final pc = _platformConfigFor(platform);
+    if (pc == null || pc.mode == ReviewMode.system) {
+      await _systemReview();
+      return;
+    }
+    try {
+      switch (platform) {
+        case TargetPlatform.iOS:
+        case TargetPlatform.macOS:
+          if (pc.storeId == null || pc.storeId!.isEmpty) {
+            await _systemReview(); // missing App Store id → fallback
+            return;
+          }
+          await _launcher.openStoreListing(appStoreId: pc.storeId);
+          break;
+        case TargetPlatform.windows:
+          if (pc.storeId == null || pc.storeId!.isEmpty) {
+            await _systemReview();
+            return;
+          }
+          await _launcher.openStoreListing(microsoftStoreId: pc.storeId);
+          break;
+        default:
+          // Android & others: openStoreListing uses the running package name.
+          await _launcher.openStoreListing();
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('openStoreListing failed, falling back to requestReview: $e');
+      }
+      await _systemReview();
+    }
+  }
+
+  Future<void> _systemReview() async {
+    if (await _launcher.isAvailable()) {
+      await _launcher.requestReview();
+    }
+  }
+
+  PlatformReviewConfig? _platformConfigFor(TargetPlatform platform) {
+    switch (platform) {
+      case TargetPlatform.iOS:
+        return _config.ios;
+      case TargetPlatform.android:
+        return _config.android;
+      case TargetPlatform.macOS:
+        return _config.macos;
+      case TargetPlatform.windows:
+        return _config.windows;
+      default:
+        return null;
+    }
+  }
+
+  /// Mark an engagement signal (e.g. the user opened a key screen): bump the
+  /// tracked usage time up to [ReviewConfig.minUsageTime] and re-evaluate, so the
+  /// prompt can appear without waiting for the timer. Respects "already responded".
+  void markEngagement() {
+    final target = _config.minUsageTime.inMilliseconds;
+    if (_state.totalUsageTime < target) {
+      _state = _state.copyWith(totalUsageTime: target);
+    }
+    _checkShouldShow();
+    notifyListeners();
+  }
+
+  /// Test seam: run the "user agreed to review" resolution directly.
+  @visibleForTesting
+  Future<void> debugRunReviewAction() => _resolveReviewAction();
 
   /// Complete the review flow
   Future<void> _completeFlow() async {

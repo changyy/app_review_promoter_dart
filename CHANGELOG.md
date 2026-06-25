@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.1.0]
+
+### Added
+- Built-in store navigation: the package can now take the user to the store/system
+  review itself (previously the host had to wire it via `onReviewRequested`).
+- `ReviewMode` (`system` / `storeListing`) and per-platform `PlatformReviewConfig`
+  on `ReviewConfig` (`ios` / `android` / `macos` / `windows`). When a platform is
+  left null it defaults to `system` (native `requestReview()`).
+- `onReviewRequest` handler (`ReviewRequestHandler`): runs first; return `true` to
+  stop, `false` to fall through to the package default. `ReviewContext` exposes the
+  current platform, app version, and `runPackageDefault`.
+- `markEngagement()`: bump tracked usage to the threshold and re-evaluate, so the
+  prompt can appear on an explicit engagement signal without waiting for the timer.
+- `StoreReviewLauncher` abstraction with default `InAppReviewLauncher` (injectable
+  for tests). Added `in_app_review` dependency.
+
+### Behavior
+- `storeListing` opens the store page directly (reliable for explicit "rate" intent),
+  avoiding the OS-throttled, undetectable native `requestReview()`.
+- iOS/macOS `storeListing` requires a store id; if missing (or the store fails to
+  open) it falls back to the native prompt. Android uses the running package name.
+
+### Compatibility
+- Fully backward compatible: existing `onReviewRequested` still works and is treated
+  as "handled". With no handler and no per-platform config, behavior is unchanged
+  (native prompt path), so upgrading needs no code changes.
+
 ## [1.0.3] - 2025-08-10
 
 ### Added
